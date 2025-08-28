@@ -30,7 +30,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class FacebookEstraiCommenti {
+public class facebook_estraiCommenti {
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, TransformerException {
 		
