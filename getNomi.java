@@ -1,57 +1,36 @@
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.util.*;
+
 import java.io.File;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.io.IOException;
 
 public class getNomi {
-
     public static void main(String[] args) {
+        try {
+            File input = new File("Hot 100 Artists.htm");
+            Document doc = Jsoup.parse(input, "UTF-8");
 
-        String directoryPath = "E:\\Giovanni\\Desktop\\html";
-        File directory = new File(directoryPath);
+            // Seleziona tutti i nomi degli artisti
+            Elements artists = doc.select("h3.c-title");
 
-        if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile()) {
-						try {
-
-							Document document = Jsoup.parse(file, "UTF-8", "");
-							ArrayList<String> nomi = new ArrayList<>();
-
-							Elements h3Elements = document.select("li.o-chart-results-list__item h3");
-							for (Element h3Element : h3Elements) {
-								nomi.add(h3Element.text());
-							}
-							
-							try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-								for (String nome : nomi) {
-									writer.write(nome + '\n');
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-
-                    }
+            int count = 0;
+            int skip = 2;
+            for (Element artist : artists) {
+                if (skip > 0) {
+                    skip--;
+                    continue;
+                }
+                String name = artist.text().trim();
+                if (!name.isEmpty()) {
+                    System.out.println((count + 1) + ". " + name);
+                    count++;
+                    if (count >= 100) break; // solo i primi 100
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
