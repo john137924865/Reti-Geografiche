@@ -1,0 +1,317 @@
+\documentclass[conference]{IEEEtran}
+%\usepackage{spconf,amsmath,amssymb,graphicx}
+\usepackage{amsmath,amssymb,graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\renewcommand{\thetable}{\arabic{table}}
+
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  stringstyle=,
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  frame=lines,     % solo linea sopra e sotto
+  tabsize=2,
+  captionpos=b
+}
+
+% Example definitions.
+% --------------------
+% nice symbols for real and complex numbers
+\newcommand{\R}[0]{\mathbb{R}}
+\newcommand{\C}[0]{\mathbb{C}}
+% bold paragraph titles
+\newcommand{\mypar}[1]{{\bf #1.}}
+
+\begin{document}
+
+\title{Through Sentiment Analysis on Social Networks}
+
+
+\author{\IEEEauthorblockN{De Pierro Giovanni}
+\IEEEauthorblockA{Department of Computer Science\\
+ University of Salerno\\
+ Italy}
+}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+La musica è da sempre uno degli intrattenimenti più accattivanti per le persone. Con
+la vasta disponibilità di piattaforme digitali e social network, gli artisti si trovano
+ad affrontare una nuova serie di sfide ed opportunità date dalla possibilità di una
+massiccia interazione con il pubblico e tra il pubblico stesso. Questo lavoro ha
+come obiettivo l'analisi del rapporto tra popolarità musicale e percezione sociale.
+L'intento è di valutare in che misura gli artisti più ascoltati siano anche associati
+a un sentiment positivo, quindi individuare se si tratti di artisti che uniscono ascolti
+elevati e forte gradimento oppure se la loro esposizione sia contrassegnata da critiche
+e opinioni negative. In questo modo si vuole contribuire a una comprensione più articolata
+della popolarità musicale contemporanea, mettendo in evidenza se il numero di ascolti non
+sempre coincide con il livello di apprezzamento.
+
+\section{Related work}\label{sec:relwork}
+
+La letteratura scientifica sul tema della musica digitale ha affrontato numerosi aspetti
+legati alla diffusione degli artisti attraverso le piattaforme di streaming e all'impatto
+dei social media nella formazione delle opinioni del pubblico [1,2]. Alcuni studi si sono
+concentrati sull'analisi delle classifiche di ascolto per descrivere l'evoluzione dei
+gusti musicali e le dinamiche di popolarità legate a generi o artisti emergenti. Diversi
+studi hanno analizzato i dati provenienti dai social network per esplorare i sentimenti
+degli utenti con lo scopo specifico di investigare la relazione tra le caratteristiche
+audio e la popolarità di una canzone [3]. Parallelamente, esiste una vasta produzione
+dedicata alla sentiment analysis applicata ai contenuti testuali dei social network,
+spesso utilizzata per monitorare il gradimento di prodotti, brand, eventi o figure pubbliche.
+
+Nonostante questi contributi, dalla revisione della letteratura, non risultano studi
+che abbiano analizzato in modo specifico la relazione tra popolarità musicale degli
+artisti e sentiment espresso sui social media.
+
+Il presente lavoro si colloca quindi in questa direzione al fine di indagare in che misura la
+visibilità degli artisti si accompagni a un apprezzamento positivo da parte del pubblico.
+
+
+\section{Background e approccio}\label{sec:background}
+
+La sentiment analysis è una tecnica fondamentale nel natural language processing (NPL) che
+consiste nell'identificare ed estrarre informazioni soggettive da dati testuali. Questo processo
+è fondamentale per comprendere il tono emotivo delle parole, e ciò può fornire preziose informazioni
+in vari campi, come il marketing, l'analisi del feedback dei clienti e i mercati finanziari.
+Con questo lavoro si è voluto analizzare il sentiment del pubblico nei confronti degli artisti
+più popolari. Il primo passo è stato, quindi, individuare gli artisti da considerare.
+
+È stata scelta come riferimento la classifica di fine anno \texttt{Billboard Hot 100 Artists}
+del 2023 che elenca i 100 artisti più popolari dell'anno, per poi recuperare i commenti
+degli utenti presenti su post e video, rispettivamente delle pagine Facebook e Youtube.
+I commenti sono stati ottenuti tramite scraping utilizzando scraper sviluppati appositamente
+con l'ausilio di Selenium WebDriver.
+
+Selenium WebDriver è uno strumento open source per l'automazione dei test funzionali di
+applicazioni web. Fa parte della suite Selenium, insieme a Selenium IDE e Selenium Grid, e
+rappresenta l'evoluzione dei metodi di automazione basati su browser rispetto a strumenti più
+semplici come l'IDE.
+A differenza di Selenium IDE, WebDriver interagisce direttamente con il browser a livello nativo,
+simulando le azioni dell'utente come clic, inserimento di testo, selezione di elementi e navigazione
+tra pagine. Questa architettura consente un controllo più preciso della pagina web ed è stata
+particolarmente utile in questo contesto per navigare le piattaforme considerate.
+
+Infine, per rilevare il sentiment dei commenti, è stato utilizzato VADER (Valence Aware Dictionary
+and Sentiment Reasoner). VADER è uno strumento molto conosciuto in questo ambito, progettato per funzionare
+bene sui testi dei social media ma efficace anche su altri formati di testo. Combina un
+lessico robusto con regole euristiche per catturare le sfumature di contesto, il che lo rende
+facile da usare e altamente accurato. Dato che VADER supporta soltanto la lingua inglese, è stata
+utilizzata la libreria fastText per rilevare la lingua di ogni commento e solo i commenti in inglese
+sono stati analizzati: fastText è una libreria open-source sviluppata da Facebook AI Research per
+l'apprendimento efficiente di rappresentazioni distribuite di parole e per la classificazione di testi.
+Uno degli utilizzi più diffusi della libreria è la language identification. In particolare, il
+modello lid.176.bin, rilasciato insieme a fastText, è un classificatore pre-addestrato in grado di
+riconoscere automaticamente la lingua di un testo breve. L'accuratezza è elevata anche su testi molto
+brevi come potrebbero essere dei commenti, per questo è stato scelto come modello per questo lavoro.
+
+I risultati ottenuti dall'analisi verranno quindi mostrati e discussi in un capitolo dedicato.
+
+Il capitolo seguente affronta nel dettaglio come è stato eseguito il lavoro di recupero
+e preprocessing dei dati, partendo dalla costruzione della lista degli artisti fino ad arrivare
+a commenti in formato testuale pronti per essere analizzati, per poi procedere con la sentiment analysis.
+
+\section{Metodologia}\label{sec:yourmethod}
+
+\mypar{Lista degli artisti} Il primo passo è stato ottenere la lista degli artisti da considerare. È stata recuperata la
+classifica Billboard consultabile all'indirizzo \url{https://www.billboard.com/charts/year-end/2023/hot-100-artists/} ed
+elaborata tramite un semplice programma scritto in Java (\texttt{getNomi.java}) per estrarre i nomi dei 100 artisti ed
+inserirli in un file XML con la seguente struttura:
+\begin{lstlisting}
+<names>
+  <name>Morgan Wallen</name>
+  <name>SZA</name>
+  ...
+<\names>
+\end{lstlisting}
+
+Sono stati, successivamente, recuperati le pagine Facebook e i canali Youtube degli artisti ed aggiunti
+come attributi al file XML. Questa operazione è stata eseguita manualmente al fine di assicurarsi che
+si trattasse di pagine ufficiali. Per gli artisti per i quali non è stato possibile recuperare le pagine,
+i valori degli attributi sono stati lasciati vuoti. Il file XML così costruito, disponibile come
+\texttt{nomi.xml}, presenta una struttura di questo tipo:
+
+\begin{lstlisting}
+<names>
+  <name youtube="morganwallen" facebook="morgancwallen">Morgan Wallen</name>
+  <name youtube="sza" facebook="sza">SZA</name>
+  ...
+<\names>
+\end{lstlisting}
+
+\mypar{Post e video} Una volta costruita la lista degli artisti con relative informazioni, il passo
+successivo è stato scrivere in Python due scraper, uno per Facebook e uno per Youtube. I due script,
+come altri programmi che verranno descritti in seguito, hanno una struttura molto simile dato che eseguono
+le stesse operazioni ma lavorando su due siti diversi. In particolare lo script \texttt{facebook\_getPostsHtml.py}
+utilizza il file \texttt{nomi.xml} per eseguire un insieme di operazioni che verrà ripetuto per ogni artista.
+
+\begin{lstlisting}[language=Python, numbers=left, numberstyle=\tiny]
+driver.get("https://www.facebook.com/" + pagina + "/")
+cookie_div = driver.find_element(By.XPATH, '//div/div/div/div/span/span[text()="Rifiuta cookie facoltativi"]')
+cookie_div.click()
+account_div = driver.find_element(By.XPATH, '//div[@aria-label="Chiudi"]')
+account_div.click()
+
+for i in range(2000):
+  scroll_script = "window.scrollTo(" + str(i*100) + ", +" + str((i+1)*100) + ");"
+  driver.execute_script(scroll_script)
+  time.sleep(10)
+  html_content = driver.page_source
+  with open(file_html, "w", encoding="utf-8") as file:
+      file.write(html_content)
+\end{lstlisting}
+
+Come si può osservare nel codice mostrato sopra, viene recuperata la pagina Facebook utilizzando
+le informazioni presenti nel file XML, e vengono eseguite alcune operazioni che servono a ripulire
+la pagina da messaggi del sito che informano, per esempio, sull'utilizzo dei cookie (righe 1-5).
+Le righe successive si occupano di scorrere la pagina per un pò di tempo in modo da visualizzare un numero
+sufficiente di post, poi la pagina viene salvata come file HTML. Questa operazione viene eseguita
+per ogni artista, in modo da ottenere alla fine per ogni artista file HTML che abbia contenuti
+in sè i link degli ultimi post Facebook pubblicati. Allo stesso modo lo script \texttt{youtube\_getVideosHtml.py}
+esegue la stessa operazione per i video Youtube, quindi cicla sulla lista degli artisti e per ognuno
+di loro recupera gli ultimi video pubblicati.
+
+A questo punto, tramite altri due programmi scritti in Java (\texttt{facebook\_getPostLinks.java} e
+\texttt{youtube\_getVideosLinks.java}), vengono navigati i file HTML per recuperare i link ai post
+e ai video pubblicati e salvarli in file di testo.
+
+Per quanto riguarda i video Youtube è stato considerato opportuno selezionare gli ultimi 25 video
+degli artisti che avessero almeno 20 commenti. Sono stati quindi esclusi gli artisti che non raggiungessero
+il numero minimo di video assieme al numero minimo di commenti. I due valori sono stati scelti in modo
+da cercare di ottenere un buon compromesso tra l'avere molti artisti che rientrassero nei parametri e
+allo stesso tempo avere una buona quantità di commenti da analizzare, magari distribuita anche su un
+intervallo di tempo sufficientemente ampio perchè si avesse una visione dell'opinione degli utenti
+che non fosse troppo limitata ad un periodo specifico. In questo modo si sono potuti considerare commenti
+anche di qualche anno precedenti al 2023. Un lavoro simile è stato effettuato riguardo i post Facebook per
+i quali sono stati considerati un numero minimo di post di 15 e un numero minimo di commenti per post di 15.
+
+\mypar{Commenti} Ottenuti i link dei post e dei video, altri due scraper Python (\texttt{facebook\_getCommentsHtml.py}
+e \texttt{youtube\_getCommentsHtml.py}) navigano le pagine per poter visualizzare i commenti degli utenti. Anche in
+questo caso vengono salvati i file HTML delle pagine, e altri due programmi Java (\texttt{facebook\_estraiCommenti.java}
+e \texttt{youtube\_estraiCommenti.java}) estraggono i commenti e li organizzano in file XML con la seguente
+struttura:
+\begin{lstlisting}
+<Name_cardib _01="1235" _02="464" ... >
+  <File_1.html commenti="1235">
+    <Commento_1 testo="Still the song was not a hit"/>
+    <Commento_2 testo="Raman is grazy you dont have to like you're comment only cardi b video"/>
+    ...
+  </File_1.html>
+  <File_2.html commenti="464">
+    ...
+  </File_2.html>
+  ...
+</Name_cardib>
+\end{lstlisting}
+Per ogni artista, in questo modo, possono esistere fino a due file XML, uno contenente i commenti Facebook e uno quelli Youtube,
+ed entrambi hanno la struttura mostrata sopra. L'elemento radice rappresenta l'artista ed ha come attributi
+i file considerati per l'estrazione dei commenti (ovvero post o video) numerati dal più recente al meno recente
+e per ognuno il relativo valore indica il numero di commenti che sono stati estratti per quel file. Gli elementi
+figli della radice rappresentano i file, ed ognuno di essi ha tanti figli quanti sono i commenti che contiene. Ogni elemento
+che rappresenta un commento ha un'attributo che contiene il contenuto del commento.
+
+\mypar{Preprocessing} La fase di raccolta dati si è così conclusa con l'organizzazione dei commenti in file XML. Parte del preprocessing
+si è svolto durante questa fase stessa dato che durante l'estrazione dei commenti le emoji e alcune immagini o alcuni video
+che avevano una rappresentazione diversa da un URL, non potevano essere considerati testo e quindi non venivano inclusi nel
+testo dei commenti. Un'ulteriore controllo è servito soltanto per rimuovere eventuali URL ed eliminare commenti
+che magari, successivamente alla rimozione degli URL, non contenevano più testo se non delimitatori lessicali. Sono stati, quindi, sviluppati
+gli script \texttt{calculate\_sentiment\_facebook.py} e \texttt{calculate\_sentiment\_youtube.py} che, prima di procedere con l'analisi, si
+occupano di eseguire questa ultima operazione di preprocessing.
+
+\mypar{Sentiment analysis} Terminate le fasi di raccolta e preparazione dei dati, i due script presentati nel paragrafo
+precedente, eseguono l'analisi del sentiment e salvano i risultati.
+
+\begin{lstlisting}[language=Python, numbers=left, numberstyle=\tiny]
+def detect_lang(txt, top_k=3, min_ratio=0.95):
+  txt = txt.lower().strip()
+  labels, probs = lang_model.predict(txt.replace("\n", " ")[:500], k=top_k)
+  max_prob = probs[0]
+  for label, prob in zip(labels, probs):
+    language_code = label.replace("__label__", "")
+    if language_code == "en" and prob >= min_ratio * max_prob:
+      return "en"
+  
+  return labels[0].replace("__label__", "")
+\end{lstlisting}
+
+Per ogni commento si utilizza il modello lid.176.bin con la libreria fastText per rilevare la lingua. Prima di tutto
+si converte tutto il testo in minuscolo e si calcolano le tre lingue più probabili considerando i primi 500 caratteri
+del commento (righe 2-3). Si salva la probabilità della lingua più probabile, quindi quella massima, e si esegue un controllo:
+invece di procedere con l'analisi soltanto se la lingua più probabile è l'inglese, si procede anche se la probabilità che
+sia inglese è non più piccola del 95\% rispetto alla lingua più probabile (riga 7). Questo permette di analizzare anche commenti
+dove la probabilità che siano scritti in inglese non è la massima ma si avvicina molto. Empiricamente è stato osservato che si
+riuscivano, in questo modo, ad includere nell'analisi anche quei commenti che erroneamente il modello non considerava scritti in
+inglese con probabilità massima.
+
+Dopo questo controllo gli script procedono con l'analisi e i risultati vengono salvati in file XML con la seguente
+struttura:
+
+\begin{lstlisting}
+<Artisti>
+  <Artista nome="_1997JungKook" sentiment="0.619">
+    <Post nome="File_1" sentiment="0.798"/>
+    <Post nome="File_2" sentiment="0.707"/>
+    ...
+  </Artista>
+  <Artista nome="_21Savage" sentiment="0.111">
+    ...
+  </Artista>
+  ...
+</Artisti>
+\end{lstlisting}
+
+Si hanno così due file XML (\texttt{sentiment\_totali\_facebook.xml} e \texttt{sentiment\_totali\_youtube.xml}) ognuno
+dei quali contiene per ogni artista il sentiment ottenuto aggregando i sentiment sui post o video, e ognuno di questi sentiment
+è stato a sua volta ottenuto aggregando i sentiment di tutti i commenti analizzati relativi a quel file. I risultati
+ottenuti verranno presentati nel capitolo seguente.
+
+\section{Risultati}\label{sec:exp}
+
+
+
+\section{Conclusioni}
+
+\begin{thebibliography}{1}
+
+\bibitem{Rompolas2022}
+Rompolas, G.: Exploiting time-series analysis to predict customers' behavioural
+dynamics in social networks. In: 13th International Conference on Information,
+Intelligence, Systems \& Applications, IISA 2022, Corfu, Greece, 18-20 July 2022,
+pp. 1-7. IEEE (2022)
+
+\bibitem{Rompolas2021}
+Rompolas, G., Karavoulia, K.: The use of the twitter graph for analyzing user
+emotion for businesses. In: Proceedings of the CIKM 2021 Workshops co-located
+with 30th ACM International Conference on Information and Knowledge Man-
+agement (CIKM 2021), Gold Coast, Queensland, Australia, 1-5 November 2021.
+CEUR Workshop Proceedings, vol. 3052. CEUR-WS.org (2021)
+
+\bibitem{Gulmatico}
+Gulmatico, J.S., Susa, J.A.B., Malbog, M.A.F., Acoba, A., Nipas, M.D., Mindoro,
+J.N.: SpotiPred: a machine learning approach prediction of spotify music popular-
+ity by audio features. In: 2022 Second International Conference on Power, Control
+and Computing Technologies (ICPC2T), pp. 1-5. IEEE (2022)
+
+\end{thebibliography}
+
+\end{document}
+
+
