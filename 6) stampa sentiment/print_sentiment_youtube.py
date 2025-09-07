@@ -5,7 +5,7 @@ import numpy
 
 # Leggi il file XML dalla stessa directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SENTIMENT_FILE = os.path.join(BASE_DIR, "sentiment_totali.xml")
+SENTIMENT_FILE = os.path.join(BASE_DIR, "sentiment_totali_youtube.xml")
 NOMI_FILE = os.path.join(BASE_DIR, "nomi.xml")
 
 # --- Leggi sentiment_totali.xml ---
@@ -60,6 +60,6 @@ plt.xticks(tick_positions, rotation=45, ha='center', fontsize=8)
 
 plt.xlabel('Artista')
 plt.ylabel('Sentiment')
-plt.title('Sentiment medio per artista')
+plt.title('Sentiment Youtube per artista')
 plt.tight_layout()
 plt.show()
