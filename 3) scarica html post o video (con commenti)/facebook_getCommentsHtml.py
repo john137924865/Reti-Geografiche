@@ -48,8 +48,6 @@ def funzione(myDriver, link, file_html):
         cookie_div.click()
         time.sleep(1)
 
-        #lorenzoficchioni@outlook.it giuseppecazzilli@outlook.it rosariopuzzillo@outlook.it mariellospazi@outlook.it luigigronda@outlook.it
-
         email_input = myDriver.find_elements(By.XPATH, '//input[@name="email"]')[1]
         email_input.send_keys("bavevaj708@wikfee.com")
         time.sleep(1)
