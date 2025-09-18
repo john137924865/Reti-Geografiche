@@ -38,6 +38,7 @@ def main():
     print("Valori YouTube:", valori_youtube)
     print(f"Totale artisti comuni: {len(nomi_comuni)}")
 
+    # Grafico 1
     x = np.arange(len(nomi_comuni))
     width = 0.35
 
@@ -46,11 +47,27 @@ def main():
     plt.bar(x + width/2, valori_youtube, width, label='YouTube', color='salmon')
     plt.xticks(x, nomi_comuni, rotation=45, ha='right', fontsize=8)
     plt.xlabel('Artista')
-    plt.ylabel('Sentiment')
+    plt.ylabel('Numero di commenti')
     plt.title('Commenti Facebook vs YouTube')
-    plt.legend()
+    plt.legend(loc='upper left')
     plt.tight_layout()
     plt.show()
+
+    # Grafico 2 - medie
+    mean_fb = np.mean(valori_facebook)
+    mean_yt = np.mean(valori_youtube)
+
+    plt.figure(figsize=(3, 4))
+    plt.bar(['Facebook', 'YouTube'], [mean_fb, mean_yt], color=['skyblue', 'salmon'], width=0.5)
+    plt.ylabel('Numero di commenti')
+    plt.title('Numero di commenti medio')
+    plt.ylim(0, 1500)
+    plt.xlim(-0.5, 1.5)
+    plt.tight_layout()
+    plt.show()
+
+    print("Media Facebook:", mean_fb)
+    print("Media YouTube:", mean_yt)
 
 if __name__ == "__main__":
     main()
